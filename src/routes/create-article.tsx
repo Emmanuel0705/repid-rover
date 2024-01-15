@@ -52,6 +52,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         console.error(err)
     }
 
+    window.location.reload()
     return redirect('/create-article')
 }
 
