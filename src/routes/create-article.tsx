@@ -1,18 +1,11 @@
-import {
-    ActionFunctionArgs,
-    Link,
-    useNavigation,
-    useSubmit,
-} from 'react-router-dom'
+import { ActionFunctionArgs, Link, useSubmit } from 'react-router-dom'
 import { IFormData } from '../interfaces'
 import APIManager from '../api/article'
-import Loader from '../components/Loader'
 import { toastError, toastSuccess } from '../components/Toast'
 import { ToastContainer } from 'react-toastify'
 import { Form, redirect, json, useActionData } from 'react-router-dom'
 import { assert, object, string, nonempty, StructError } from 'superstruct'
 import Input from '../components/Input'
-import React, { useEffect, useState } from 'react'
 
 const articleSchema = object({
     title: nonempty(string()),
@@ -24,7 +17,6 @@ const articleSchema = object({
 })
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-    console.log(request)
     const form = await request.formData()
 
     const formToJSON: any = {}
@@ -59,35 +51,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         }
         console.error(err)
     }
-    window.location.reload()
+
     return redirect('/create-article')
 }
 
 const CreateArticle = () => {
     const actionData: any = useActionData()
 
-    const submit = useSubmit()
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-
-    const handleSubmit = async (
-        e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        setIsLoading(true)
-        e.preventDefault()
-        setIsLoading(true)
-        submit(e.currentTarget.form)
-    }
-
-    useEffect(() => {
-        console.log(actionData)
-        setIsLoading(false)
-    }, [actionData])
-
     return (
         <>
             <ToastContainer />
 
-            {isLoading && <Loader />}
             <nav className="bg-white  fixed w-full z-20 top-0 start-0 border-b border-gray-200 ">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-end mx-auto p-4">
                     <Link
@@ -271,7 +245,6 @@ const CreateArticle = () => {
                             <div className="flex flex-row-reverse p-3">
                                 <div className="flex-initial pl-3">
                                     <input
-                                        onClick={(e: any) => handleSubmit(e)}
                                         type="submit"
                                         className="flex items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize   bg-black rounded-md hover:bg-gray-800  focus:outline-none focus:bg-gray-900  transition duration-300 transform active:scale-95 ease-in-out"
                                     />
